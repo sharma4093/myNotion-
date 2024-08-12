@@ -1,11 +1,13 @@
-import Login from './Pages/Login'
+import Login from "./Auth/Login"
+import Main from "./Pages/Main"
+
 
 function App() {
 
   return (
     <>
-    <h1 className="text-yellow-400">jflasj</h1>
       <Login/>
+      {/* <Main/> */}
     </>
   )
 }
