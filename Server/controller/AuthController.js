@@ -1,7 +1,7 @@
 import { User } from "../models/UserModel.js";
 import bcrypt from 'bcryptjs';
 import jsonwebtoken from 'jsonwebtoken'
-const jwt = jsonwebtoken
+const jwt = jsonwebtoken;
 import cookieParser from "cookie-parser";
 import { sendResponse } from '../middlewares/makeresponse.js';
 import { Router } from 'express';
@@ -11,6 +11,30 @@ import { checkUser } from '../middlewares/checkuser.js';
 
 const route = Router();
 
+
+route.post('/login', checkUser,async(req,res)=>{
+    try {
+        const {email,password } = req.body;
+        console.log(email);
+        const user = await User.findOne({email:email});
+        const checkPassword =await bcrypt.compare(password,user.password);
+        
+        console.log(checkPassword);
+        const jwtToken = jwt.sign({email:email},process.env.JWT_SECRET_CODE, {expiresIn:5000});
+        res.cookie('AuthToken',jwtToken,{maxAge:5000}).send('logged in');
+        const ver = jwt.verify(jwtToken, process.env.JWT_SECRET_CODE)
+        console.log(ver,'verified')
+
+        const hey = jwt.decode(jwtToken);
+        console.log(hey, 'this is decoded value of token');
+        if(!checkPassword){
+            return sendResponse(res,200, false,"password didn't matched", null);
+        }
+
+    } catch (error) {
+        res.send(error.message)
+    }
+})
 
 
 route.post('/register', checkUser,async (req,res)=>{
@@ -27,6 +51,8 @@ route.post('/register', checkUser,async (req,res)=>{
         sendResponse(res,500, false,'failed to register', error);
     }
 })
+    
+
 
 route.get('/get/:email', async (req,res)=>{
     try {
@@ -89,34 +115,34 @@ export const AuthController = route;
 
 
 
-export const login = async (req,res)=> {
-    try {
-        const {email, password} = req.body;
-        if(!(email && password)){
-            return res.status(400).json({message:'all data is required'})
-        }
-        const user = await User.findOne({email});
-        if(!user){
-            return res.status(404).send({message:'uesr not found',error:{
-                message:error.message,
-                stack:error.stack
-            }})
-        }
-        const checkPassword = await bcrypt.compare(password,user.password);
-        if(checkPassword){
-            const jwtToken =  jwt.sign({id:user._id,email:user.email}, process.env.JWT_SECRET_CODE,{expiresIn:3000});
+// export const login = async (req,res)=> {
+//     try {
+//         const {email, password} = req.body;
+//         if(!(email && password)){
+//             return res.status(400).json({message:'all data is required'})
+//         }
+//         const user = await User.findOne({email});
+//         if(!user){
+//             return res.status(404).send({message:'uesr not found',error:{
+//                 message:error.message,
+//                 stack:error.stack
+//             }})
+//         }
+//         const checkPassword = await bcrypt.compare(password,user.password);
+//         if(checkPassword){
+//             const jwtToken =  jwt.sign({id:user._id,email:user.email}, process.env.JWT_SECRET_CODE,{expiresIn:3000});
             
-             res.status(200).json({message:'user logged in successfully',token:jwtToken});
-        }else{
-            return res.status(404).send('password not matched');
-        }
-    } catch (error) {
-        return res.status(404).json({message:"login failed", error:{
-            message:error.message,
-            stack:error.stack
-        }});
-    }
-}
+//              res.status(200).json({message:'user logged in successfully',token:jwtToken});
+//         }else{
+//             return res.status(404).send('password not matched');
+//         }
+//     } catch (error) {
+//         return res.status(404).json({message:"login failed", error:{
+//             message:error.message,
+//             stack:error.stack
+//         }});
+//     }
+// }
 
 // export const RegisterUser = async (req, res) => {
 //     try {

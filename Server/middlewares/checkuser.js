@@ -19,8 +19,8 @@ export const checkUser=async (req,res,next)=>{
 try {
     const email = {email:req.body.email};
     const user = await User.findOne(email);
-    if(user){
-        return sendResponse(res,200,true, 'user already exists!', user);
+    if(!user){
+        return sendResponse(res,200,true, 'user doesnt exists!', user);
     }
     next();
 } catch (error) {

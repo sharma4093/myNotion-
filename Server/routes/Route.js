@@ -9,7 +9,7 @@ import { TaskController } from "../controller/TaskController.js";
 
 const route = express.Router();
 
-route.use('/user',checkUser,AuthController);
+route.use('/user',AuthController);
 route.use('/task',TaskController);
 export default route;
 //  route.get('/protectedroute',secretRoute);

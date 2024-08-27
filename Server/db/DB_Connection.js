@@ -15,7 +15,7 @@ const uri = "mongodb+srv://prashant4093:prashant4093@mynotion.jtwq7kr.mongodb.ne
 const connectDB = async ()=>{
     await mongoose.connect(uri,{serverSelectionTimeoutMS:30000})
     .then(({connection})=>console.log(`Database is connected ${connection.port}`))
-    .catch((error)=>{throw new error; console.error(error);});
+    .catch((error)=>{throw new error; console.error(error);})
 }
 
 export default connectDB;
