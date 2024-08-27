@@ -13,6 +13,7 @@ const Login=()=> {
   const handleClickSubmit=async (data)=>{
     if(switchMode != 'login'){
         try {
+          console.log(data);
           const res = await axios.post('http://localhost:4500/user/register',data);
           console.log(res.data);
           alert('successfully registered');
@@ -69,8 +70,7 @@ const Login=()=> {
                         </label>
                         <input
                           type="email"
-                          id="email"
-                          name="email"
+                          {...register('email', {required:true})}
                           placeholder="Enter your email"
                           className="block w-full rounded-lg border border-gray-200 px-5 py-2 leading-6 placeholder-gray-500 focus:border-purple-500 focus:ring focus:ring-purple-500/50 dark:border-gray-600 dark:bg-gray-800 dark:placeholder-gray-400 dark:focus:border-purple-500"
                         />
@@ -180,10 +180,7 @@ const Login=()=> {
                           Name
                         </label>
                         <input
-                        defaultValue='' {...register("name")}
-                          // type="email"
-                          // id="email"
-                          // name="email"
+                        defaultValue='' {...register("name",{required:errors.message})}
                           placeholder="Name"
                           className="block w-full rounded-lg border border-gray-200 px-5 py-2 leading-6 placeholder-gray-500 focus:border-purple-500 focus:ring focus:ring-purple-500/50 dark:border-gray-600 dark:bg-gray-800 dark:placeholder-gray-400 dark:focus:border-purple-500"
                         />
@@ -195,6 +192,7 @@ const Login=()=> {
                         <input
                         defaultValue=""
                         {...register("email", {required:true})}
+                        type='email'
                           placeholder="email"
                           className="block w-full rounded-lg border border-gray-200 px-5 py-2 leading-6 placeholder-gray-500 focus:border-purple-500 focus:ring focus:ring-purple-500/50 dark:border-gray-600 dark:bg-gray-800 dark:placeholder-gray-400 dark:focus:border-purple-500"
                         />
@@ -204,7 +202,8 @@ const Login=()=> {
                         </label>
                         <input
                           defaultValue=""
-                          {...register('mobile_no')}
+                          {...register('mobile_no',{required:true})}
+                          type='number'
                           placeholder="Mobile No"
                           className="block w-full rounded-lg border border-gray-200 px-5 py-2 leading-6 placeholder-gray-500 focus:border-purple-500 focus:ring focus:ring-purple-500/50 dark:border-gray-600 dark:bg-gray-800 dark:placeholder-gray-400 dark:focus:border-purple-500"
                         />
@@ -215,6 +214,7 @@ const Login=()=> {
                           Password
                         </label>
                         <input
+                          type='text'
                           {...register('password',{required:true})}
                           placeholder="password"
                           className="block w-full rounded-lg border border-gray-200 px-5 py-2 leading-6 placeholder-gray-500 focus:border-purple-500 focus:ring focus:ring-purple-500/50 dark:border-gray-600 dark:bg-gray-800 dark:placeholder-gray-400 dark:focus:border-purple-500"
